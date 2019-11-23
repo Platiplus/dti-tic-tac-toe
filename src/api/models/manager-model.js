@@ -14,7 +14,7 @@ class GameManager {
   }
 
   isThisYourTurn (_id, player) {
-    const game = this.games.find((game) => game.id === _id)
+    const game = this.games.find((match) => match.id === _id)
     const turn = game.playerTurn === player
 
     return turn
