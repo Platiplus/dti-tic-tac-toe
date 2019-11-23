@@ -35,7 +35,6 @@ class Game {
     ]
 
     const winner = winningConditions.some(condition => condition[0] === player && condition[1] === player && condition[2] === player)
-    console.log('WINNER ' + winner)
 
     return winner
   }
