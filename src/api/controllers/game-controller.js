@@ -13,7 +13,24 @@ const createGame = (request, response) => {
 }
 
 const makeMove = (request, response) => {
-// @TODO MAKE MOVE METHOD
+  const { id } = request.params
+  const { player, position } = request.body
+
+  const game = manager.thisGameExists(id)
+  game.makeMove(position.x, position.y, player)
+  game.takeTurn()
+
+  const winner = game.checkWinner(player)
+
+  if (winner) {
+    return response.status(200).json({ msg: 'Partida finalizada', winner: player })
+  }
+
+  if (game.turn === 9) {
+    return response.status(200).json({ msg: 'Partida finalizada', winner: 'Draw' })
+  }
+
+  return response.status(200).json({ msg: 'Movimento computado' })
 }
 
 module.exports = {
