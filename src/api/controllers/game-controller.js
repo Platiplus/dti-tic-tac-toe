@@ -1,10 +1,8 @@
 // DEPENDENCIES
 const Game = require('../models/game-model')
-const GameManager = require('../models/manager-model')
 
 // CONTROL VARS
-const manager = new GameManager()
-manager.watchOurGames()
+const manager = require('../utils/manager-util')
 
 // CONTROLLERS
 const createGame = (request, response) => {
@@ -15,7 +13,7 @@ const createGame = (request, response) => {
 }
 
 const makeMove = (request, response) => {
-  // @TODO MAKE MOVE METHOD
+// @TODO MAKE MOVE METHOD
 }
 
 module.exports = {
