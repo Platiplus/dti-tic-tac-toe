@@ -1,7 +1,11 @@
 language: node_js
-node_js: 
-  - "stable"
+node_js:
+- stable
 cache: npm
 branches:
   only:
   - master
+deploy:
+  provider: heroku
+  api_key:
+    secure: aMjHOWfEnK6xGcV8bg8CwtgqRz0TU7GtTaHJuzy/t5Ctx2sTYIgyFeVsVfxvcDbgxUuiTldSDhb6Zl8eTftpBPRxR82AaxGd2mR1nYGYC42tXQp/DcasAPGNQpxdtxhv/M8Q2tPwKf4QdE4k4V/hdo+ob0Ia0BCUpO8p3uM55MmJ+iGpg6RBXd55tfA4zSRl29rSyV9KuHDG5fY2t2IGenpGt+mb3p+kloGXvQlz6nvVlNjSMj8DzvwjTRILN7hwy0OJ/de181FIkDEmG+RK8BcEjVf+zbg1AJG4etxVV2wWSMujXFWDHjgSYvLgmfh3t7Z3hGyA7OTT3LWh/fNJvSrb2mOit8hDkir46TfNUxZlCwE9YgAAPYSKH4Anglzm0pIRGyYkRSYYtHn7//PPNJP298vIf9wAYjSlUupaHGNDD7q0vXsKG0uxcGkWNMehljAXf1e/cTZeQ7XXCe7W8wCpp1a6FGB2oDbvmEIAF1+B9zk7EMmNb93GLqO9JqjxNwKQfDKA2pp8UCeK0iHhz7iCe10sGGGIaFNHBBsJEZ9rA2AH5TQ9xXpukOyKU6nBV5m/xmyZF6Z9Ryhw+Pg3Ga/CKKVBajLSco3sIO5zmZXBw27Zrjhf4xZB9JolPW0CJ+7KcxJ3I2JiKVRqOd9XSfBJaTTNd+vXIyg5Qag98zQ=
