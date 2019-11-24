@@ -16,7 +16,7 @@ chai.use(dirtyChai)
 // GAME RELATED TESTS
 describe('Game', () => {
   describe('/POST /game/', () => {
-    it('it should create a game', (done) => {
+    it('Should create a game', (done) => {
       chai.request(server)
         .post('/game')
         .send()
@@ -43,7 +43,7 @@ describe('Game', () => {
       nock.cleanAll()
     })
 
-    it('it should make a move successfully', (done) => {
+    it('Should make a move successfully', (done) => {
       const move = {
         id: gameInfo.body.id,
         player: gameInfo.body.firstPlayer,
@@ -63,7 +63,7 @@ describe('Game', () => {
           done()
         })
     })
-    it('it should fail to make a move if it is not your turn', (done) => {
+    it('Should fail to make a move if it is not your turn', (done) => {
       const move = {
         id: gameInfo.body.id,
         player: gameInfo.body.firstPlayer === 'X' ? 'O' : 'X',
@@ -83,7 +83,7 @@ describe('Game', () => {
           done()
         })
     })
-    it('it should not move if the game does not exists', (done) => {
+    it('Should not move if the game does not exists', (done) => {
       const move = {
         id: gameInfo.body.id,
         player: gameInfo.body.firstPlayer,
@@ -103,55 +103,109 @@ describe('Game', () => {
           done()
         })
     })
-    it('it should return a winner if it exists', (done) => {
-      nock(/http:\/\/127\.0\.0\.1/)
-        .post(`/game/${gameInfo.body.id}/movement/`)
-        .reply(200, { msg: 'Partida finalizada', winner: 'X' })
+    describe('Test for draw', () => {
+      let gameInfo
+      let player
 
-      const move = {
-        id: gameInfo.body.id,
-        player: gameInfo.body.firstPlayer,
-        position: {
-          x: 0,
-          y: 1
+      before(async () => {
+        gameInfo = await chai.request(server).post('/game').send()
+        gameInfo = gameInfo.body
+        player = gameInfo.firstPlayer
+      })
+
+      beforeEach((done) => {
+        chai.request(server).post('/game')
+          .send()
+          .end(async (err, res) => {
+            if (err !== null) console.log(err)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 0, y: 1 } })
+            player = takeTurn(player)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 0, y: 1 } })
+            player = takeTurn(player)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 0, y: 1 } })
+            player = takeTurn(player)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 0, y: 1 } })
+            player = takeTurn(player)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 0, y: 1 } })
+            player = takeTurn(player)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 0, y: 1 } })
+            player = takeTurn(player)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 0, y: 1 } })
+            player = takeTurn(player)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 0, y: 1 } })
+            done()
+          })
+      })
+
+      it('Should give a draw result in case there is no winner', (done) => {
+        const move = {
+          id: gameInfo.id,
+          player: gameInfo.firstPlayer,
+          position: {
+            x: 0,
+            y: 1
+          }
         }
-      }
-      chai.request(server)
-        .post(`/game/${gameInfo.body.id}/movement/`)
-        .send(move)
-        .end((err, res) => {
-          expect(err).to.be.null()
-          expect(res).to.have.status(200)
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.property('msg').equal('Partida finalizada')
-          expect(res.body).to.have.property('winner').equal('X')
-          done()
-        })
+        chai.request(server)
+          .post(`/game/${gameInfo.id}/movement`)
+          .send(move)
+          .end((err, res) => {
+            expect(err).to.be.null()
+            expect(res).to.have.status(200)
+            expect(res.body).to.be.a('object')
+            expect(res.body).to.have.property('msg').equal('Partida finalizada')
+            expect(res.body).to.have.property('winner').equal('Draw')
+            done()
+          })
+      })
     })
-    it('it should return a draw if no winner exists', (done) => {
-      nock(/http:\/\/127\.0\.0\.1/)
-        .post(`/game/${gameInfo.body.id}/movement/`)
-        .reply(200, { msg: 'Partida finalizada', winner: 'Draw' })
+    describe('Test for winner', () => {
+      let gameInfo
+      let player
 
-      const move = {
-        id: gameInfo.body.id,
-        player: gameInfo.body.firstPlayer,
-        position: {
-          x: 0,
-          y: 1
+      before(async () => {
+        gameInfo = await chai.request(server).post('/game').send()
+        gameInfo = gameInfo.body
+        player = gameInfo.firstPlayer
+      })
+
+      beforeEach((done) => {
+        chai.request(server).post('/game')
+          .send()
+          .end(async (err, res) => {
+            if (err !== null) console.log(err)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 0, y: 0 } })
+            player = takeTurn(player)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 1, y: 0 } })
+            player = takeTurn(player)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 1, y: 1 } })
+            player = takeTurn(player)
+            await chai.request(server).post(`/game/${gameInfo.id}/movement`).send({ id: gameInfo.id, player, position: { x: 2, y: 1 } })
+            done()
+          })
+      })
+
+      it('Should give a winner if there is one', (done) => {
+        const move = {
+          id: gameInfo.id,
+          player: gameInfo.firstPlayer,
+          position: {
+            x: 2,
+            y: 2
+          }
         }
-      }
-      chai.request(server)
-        .post(`/game/${gameInfo.body.id}/movement/`)
-        .send(move)
-        .end((err, res) => {
-          expect(err).to.be.null()
-          expect(res).to.have.status(200)
-          expect(res.body).to.be.an('object')
-          expect(res.body).to.have.property('msg').equal('Partida finalizada')
-          expect(res.body).to.have.property('winner').equal('Draw')
-          done()
-        })
+        chai.request(server)
+          .post(`/game/${gameInfo.id}/movement`)
+          .send(move)
+          .end((err, res) => {
+            expect(err).to.be.null()
+            expect(res).to.have.status(200)
+            expect(res.body).to.be.a('object')
+            expect(res.body).to.have.property('msg').equal('Partida finalizada')
+            expect(res.body).to.have.property('winner').equal(move.player)
+            done()
+          })
+      })
     })
   })
 })
@@ -161,4 +215,8 @@ const players = (player) => {
     return true
   }
   return false
+}
+
+const takeTurn = (player) => {
+  return player === 'X' ? 'O' : 'X'
 }

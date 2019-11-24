@@ -14,7 +14,7 @@ chai.use(dirtyChai)
 
 describe('App', () => {
   describe('/GET Unknown route', () => {
-    it('it should fail to serve a route that does not exits', (done) => {
+    it('Should fail to serve a route that does not exits', (done) => {
       chai.request(server)
         .get('/non-existent-route/')
         .end((err, res) => {
