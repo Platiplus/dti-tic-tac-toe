@@ -25,6 +25,7 @@ Informações detalhadas sobre a instalação serão encontradas nos links acima
 
 ### Informações
 Relatório de code-coverage online em [Coveralls](https://coveralls.io/github/Platiplus/dti-tic-tac-toe)
+
 Deploy do projeto pode ser consultado e testado em [Heroku](http://dti-tic-tac-toe.herokuapp.com/)
 
 ### Rodando o projeto
@@ -36,7 +37,7 @@ O projeto estará rodando no endereço 'http://localhost:8080'
 Uma instância do Sonar também estará rodando em 'http://localhost:9000'
 
 #### Localmente
-Caso desejar instalar o projeto localmente sem a utilização de containers, entre na pasta raiz do projeto e rode o comando ````npm install```,
+Caso desejar instalar o projeto localmente sem a utilização de containers, entre na pasta raiz do projeto e rode o comando ```npm install```,
 depois rode o comando ```node server.js```.
 
 Também será necessário a criação de um arquivo ```.env``` conforme o exemplo encontrado em ```.example.env``` ou somente renomear este arquivo.
